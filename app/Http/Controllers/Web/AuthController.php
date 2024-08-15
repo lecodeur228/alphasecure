@@ -22,7 +22,7 @@ class AuthController extends Controller
          $credentials = $request->only('email', 'password');
  
          if (Auth::attempt($credentials)) {
-             return redirect()->intended('/');
+             return redirect()->intended('/agents');
          }
  
          return redirect()->back()->withErrors(['email' => 'Ces informations ne correspondent pas à nos dossiers.']);

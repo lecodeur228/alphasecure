@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->enum('type_shift', ['Matin', 'Soir']);
+            $table->boolean("enService")->default(false);
             $table->foreignIdFor(Agent::class);
             $table->timestamps();
         });

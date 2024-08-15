@@ -1,61 +1,96 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header">{{ __('Edit Shift') }}</div>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('shifts.update', $shift->id) }}">
-                        @csrf
-                        @method('PUT')
+<div class="app-wrapper">
 
-                        <div class="form-group">
-                            <label for="date">{{ __('Date') }}</label>
-                            <input id="date" type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date', $shift->date) }}" required>
-                            @error('date')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
+    <div class="app-content pt-3 p-md-3 p-lg-4">
+        <div class="container-xl">
+            <h1 class="app-page-title">Modifier un Shift</h1>
+            <hr class="mb-4">
+            <div class="row g-4 settings-section">
+            
+            <div class="container d-flex justify-content-center align-items-center min-vh-100">
+                <div class="col-12 col-md-8">
+                    <div class="app-card app-card-settings shadow-sm p-4">
+                        <div class="app-card-body">
 
-                        <div class="form-group">
-                            <label for="type_shift">{{ __('Shift Type') }}</label>
-                            <input id="type_shift" type="text" class="form-control @error('type_shift') is-invalid @enderror" name="type_shift" value="{{ old('type_shift', $shift->type_shift) }}" required>
-                            @error('type_shift')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
-                        <div class="form-group">
-                            <label for="agent_id">{{ __('Agent') }}</label>
-                            <select id="agent_id" class="form-control @error('agent_id') is-invalid @enderror" name="agent_id" required>
-                                <option value="">Select an Agent</option>
-                                @foreach($agents as $agent)
-                                    <option value="{{ $agent->id }}" {{ old('agent_id', $shift->agent_id) == $agent->id ? 'selected' : '' }}>{{ $agent->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('agent_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
+                            <form class="settings-form" method="POST" action="{{ route('shifts.update', $shift->id) }}">
+                                @csrf
+                                @method('PUT')
 
-                        <div class="form-group mb-0">
-                            <button type="submit" class="btn btn-primary">
-                                {{ __('Update') }}
-                            </button>
-                        </div>
-                    </form>
+                                {{-- Champ Agent --}}
+                                <div class="mb-3">
+                                    <label for="agent_id" class="form-label">Agent</label>
+                                    <select name="agent_id" id="agent_id" class="form-select @error('agent_id') is-invalid @enderror" required>
+                                        <option value="" disabled>Choisir un agent</option>
+                                        @foreach($agents as $agent)
+                                            <option value="{{ $agent->id }}" {{ $shift->agent_id == $agent->id ? 'selected' : '' }}>
+                                                {{ $agent->nom }} {{ $agent->prenom }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('agent_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                {{-- Champ Date --}}
+                                <div class="mb-3">
+                                    <label for="date" class="form-label">Date</label>
+                                    <input type="date" name="date" id="date" class="form-control @error('date') is-invalid @enderror" value="{{ old('date', $shift->date->format('Y-m-d')) }}" required>
+                                    @error('date')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                {{-- Champ Type de Shift --}}
+                                <div class="mb-3">
+                                    <label for="type_shift" class="form-label">Type de Shift</label>
+                                    <select name="type_shift" id="type_shift" class="form-select @error('type_shift') is-invalid @enderror" required>
+                                        <option value="" disabled>Choisir un type de shift</option>
+                                        <option value="matin" {{ $shift->type_shift == 'matin' ? 'selected' : '' }}>Matin</option>
+                                        <option value="soir" {{ $shift->type_shift == 'soir' ? 'selected' : '' }}>Soir</option>
+                                    </select>
+                                    @error('type_shift')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <button type="submit" class="btn app-btn-primary">Modifier</button>
+                            </form>
+                        </div><!--//app-card-body-->
+                    </div><!--//app-card-->
                 </div>
             </div>
+
+            </div><!--//row-->
+          
+        </div><!--//container-xl-->
+    </div><!--//app-content-->
+
+    <footer class="app-footer">
+        <div class="container text-center py-3">
+            <small class="copyright">Designed with <span class="sr-only">love</span><i class="fas fa-heart" style="color: #fb866a;"></i> by <a class="app-link" href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> for developers</small>
         </div>
-    </div>
-</div>
+    </footer><!--//app-footer-->
+
+</div><!--//app-wrapper-->
+
 @endsection

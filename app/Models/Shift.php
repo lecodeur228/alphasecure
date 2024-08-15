@@ -10,6 +10,10 @@ class Shift extends Model
     use HasFactory;
     protected $fillable = ['date', 'shift_type', 'agent_id'];
 
+    protected $casts = [
+        'date' => 'datetime',
+    ];
+
     /**
      * Get the agent that owns the shift.
      */

@@ -51,6 +51,25 @@ class ShiftController extends Controller
   
           return redirect()->route('shifts.index')->with('success', 'Shift ajouté avec succès.');
       }
+
+      public function changeState($id)
+      {
+          // Vérifie si le shift existe
+          $shift = Shift::find($id);
+      
+          if ($shift) {
+              // Change l'état du shift
+              $shift->state = ($shift->state == 0) ? 1 : 0;
+              $shift->save();
+      
+              // Redirection avec message de succès
+              return redirect()->route('shifts.index')->with('success', 'État du shift modifié avec succès.');
+          } else {
+              // Redirection avec message d'erreur si le shift n'existe pas
+              return redirect()->route('shifts.index')->with('error', 'Shift non trouvé.');
+          }
+      }
+      
   
       // Afficher les détails d'un shift
       public function show(Shift $shift)

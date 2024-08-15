@@ -30,7 +30,7 @@ class AgentController extends Controller
             'prenom' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:agents',
             'telephone' => 'required|string|max:15',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable',
         ]);
 
         $agent = new Agent();
@@ -71,7 +71,7 @@ class AgentController extends Controller
             'prenom' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:agents,email,' . $agent->id,
             'telephone' => 'required|string|max:15',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable',
         ]);
 
         $agent->nom = $request->nom;

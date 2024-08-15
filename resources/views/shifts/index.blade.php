@@ -1,46 +1,90 @@
-@extends('layouts.app')
+@extends("layouts.app")
 
-@section('content')
-<div class="container">
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <a href="{{ route('shifts.create') }}" class="btn btn-primary">Add New Shift</a>
-        </div>
-    </div>
+@section("content")
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">Shifts List</div>
+<div class="app-wrapper">
 
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Date</th>
-                                <th>Shift Type</th>
-                                <th>Agent</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($shifts as $shift)
-                                <tr>
-                                    <td>{{ $shift->id }}</td>
-                                    <td>{{ $shift->date }}</td>
-                                    <td>{{ $shift->type_shift }}</td>
-                                    <td>{{ $shift->agent ? $shift->agent->name : 'No Agent' }}</td>
-                                    <td>
-                                        <a href="{{ route('shifts.edit', $shift->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+    <div class="app-content pt-3 p-md-3 p-lg-4">
+        <div class="container-xl">
+            <h1 class="app-page-title">Liste des Shifts</h1>
+            <div class="col-auto">
+                <div class="row  g-2 justify-content-start justify-content-md-end align-items-center">
+                    <a class="btn app-btn-primary" href="{{ route('shifts.create') }}">Ajouter un agent</a>
+                    <a class="btn app-btn-primary" href="{{ route('shifts.create') }}">Informer les agents</a>
                 </div>
             </div>
+            <hr class="mb-4">
+            <div class="row g settings-section">
+            
+            <div class="container d-flex justify-content-center align-items-center ">
+                <div class="col-12">
+                    <div class="app-card app-card-orders-table shadow-sm mb-5">
+                        <div class="app-card-body">
+                          <div class="table-responsive">
+                            <table class="table app-table-hover mb-0 text-left">
+                              <thead>
+                                <tr>
+                                  <th class="cell">Date</th>
+                                  <th class="cell">Agent</th>
+                                  <th class="cell">Type de Shift</th>
+                                 
+                                  <th class="cell"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @foreach($shifts as $shift)
+                                <tr>
+                                  <td class="cell">{{ $shift->date->locale('fr')->format('d M Y') }}</td>
+                                  <td class="cell">
+                                    {{ $shift->agent->nom }}
+                                    <br>
+                                    {{ $shift->agent->prenom }}
+
+                                  </td>
+                                
+                                  <td class="cell">{{ $shift->type_shift }}</td>
+                                 
+                                  <td class="cell">
+                                    <a class="btn-sm app-btn-secondary" href="{{ route('shifts.edit', $shift->id) }}">Modifier</a>
+                                  </td>
+                                  <td class="cell">
+                                    <td class="cell">
+                                        @if (!$shift->enService)
+                                            <form action="{{ route('changeState', $shift->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                <button type="submit" class="btn-sm app-btn-primary">Présent</button>
+                                            </form>
+                                        @else
+                                            <span class="badge bg-success">En service</span>
+                                        @endif
+                                    </td>
+                                    
+                                </td>
+                                
+                                  
+                                </tr>
+                                @endforeach
+                              </tbody>
+                            </table>
+                          </div><!--//table-responsive-->
+                        </div><!--//app-card-body-->
+                    </div><!--//app-card-->
+                </div>
+            </div>
+
+            </div><!--//row-->
+          
+        </div><!--//container-xl-->
+    </div><!--//app-content-->
+
+    <footer class="app-footer">
+        <div class="container text-center py-3">
+            <small class="copyright">Designed with <span class="sr-only">love</span><i class="fas fa-heart"
+                    style="color: #fb866a;"></i> by <a class="app-link" href="http://themes.3rdwavemedia.com"
+                    target="_blank">Xiaoying Riley</a> for developers</small>
         </div>
-    </div>
-</div>
+    </footer><!--//app-footer-->
+
+</div><!--//app-wrapper-->
+
 @endsection
